@@ -1,4 +1,4 @@
-﻿services:
+services:
   app:
     build:
       context: .
@@ -10,6 +10,7 @@
       - .:/app
     environment:
       PYTHONUNBUFFERED: 1
+      OPENHOUSING_MODEL_PATH: /app/models/model.pkl
 
   jupyter:
     build:

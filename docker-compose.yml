@@ -1,0 +1,24 @@
+﻿services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+
+

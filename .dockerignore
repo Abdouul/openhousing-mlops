@@ -1,0 +1,13 @@
+﻿.git
+.github
+.venv
+venv
+__pycache__
+.pytest_cache
+.ipynb_checkpoints
+*.pyc
+.env
+database/*
+models/*
+data/raw/*
+data/processed/*

@@ -1,1 +1,1 @@
-"""Modules ETL."""
+"""Composants du pipeline ETL OpenHousing."""

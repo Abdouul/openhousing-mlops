@@ -1,5 +1,7 @@
 # OpenHousing MLOps
 
+[![CI/CD](https://github.com/Abdouul/openhousing-mlops/actions/workflows/ci.yml/badge.svg)](https://github.com/Abdouul/openhousing-mlops/actions/workflows/ci.yml)
+
 OpenHousing étudie les indicateurs socio-économiques et les prix immobiliers. Ce dépôt contient le POC Boston Housing et accueillera le pipeline ETL, le modèle et l'API du MVP.
 
 ## Organisation
@@ -94,3 +96,20 @@ Lancer Jupyter en mode developpement :
 Arreter les services :
 
     docker compose down
+
+## CI/CD
+
+GitHub Actions execute automatiquement :
+
+1. compilation et tests Python ;
+2. validation JSON des notebooks ;
+3. construction de la cible Docker api ;
+4. publication sur GitHub Container Registry apres succes sur main.
+
+Les Pull Requests construisent l image sans la publier. Les pushes sur main publient deux tags : latest et sha-<commit>.
+
+Image publiee :
+
+    ghcr.io/abdouul/openhousing-mlops:latest
+
+Dependabot verifie chaque semaine les actions GitHub, les dependances Python et l image de base Docker.

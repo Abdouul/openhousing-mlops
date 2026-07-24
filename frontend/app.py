@@ -25,7 +25,6 @@ with st.sidebar:
                     st.warning(f"Etat recu : {health.get('status', 'inconnu')}")
             except OpenHousingAPIError as exc:
                 st.error(str(exc))
-    st.info("Sur une offre gratuite Render, le premier appel apres une periode d inactivite peut prendre environ une minute.")
 
 with st.form("prediction_form"):
     left, middle, right = st.columns(3)

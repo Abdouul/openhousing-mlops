@@ -95,15 +95,12 @@ client = OpenHousingClient(api_url)
 # KPI
 # ==========================================================
 
-col1, col2, col3 = st.columns(3)
+col1, col2, = st.columns(2)
 
 with col1:
     st.metric("Variables analysées", "12")
 
 with col2:
-    st.metric("Type de modèle", "Régression ML")
-
-with col3:
     st.metric("API", "En ligne ✅")
 
 # ==========================================================

@@ -66,6 +66,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Set up training Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-api.txt
+
+      - name: Install training dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-api.txt
+
+      - name: Run ETL
+        run: python -m src.etl.pipeline --download-if-missing
+
+      - name: Train and select production model
+        run: python -m src.model.train
+
+      - name: Verify model artifact
+        run: test -s models/model.pkl
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 

@@ -69,6 +69,15 @@ Exemple de prediction :
 
     curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d "{\"crim\":0.00632,\"zn\":18,\"indus\":2.31,\"chas\":0,\"nox\":0.538,\"rm\":6.575,\"age\":65.2,\"dis\":4.09,\"rad\":1,\"tax\":296,\"ptratio\":15.3,\"lstat\":4.98}"
 
+## Entrainement automatise
+
+Le modele de production est recree depuis les donnees traitees, sans dependre du notebook :
+
+    python -m src.etl.pipeline --download-if-missing
+    python -m src.model.train
+
+Le script compare Linear Regression, Random Forest et XGBoost avec le RMSE, sauvegarde le meilleur dans models/model.pkl et ecrit les metriques dans models/metrics.json. Ces fichiers restent ignores par Git car ils sont generes automatiquement.
+
 ## Docker
 
 L image API utilise Python 3.12 et XGBoost CPU. Elle s execute avec un utilisateur non-root, un systeme de fichiers en lecture seule et un healthcheck sur /ready. Le fichier models/model.pkl doit exister avant le demarrage.
@@ -103,13 +112,16 @@ GitHub Actions execute automatiquement :
 
 1. compilation et tests Python ;
 2. validation JSON des notebooks ;
-3. construction de la cible Docker api ;
-4. publication sur GitHub Container Registry apres succes sur main.
+3. execution ETL et entrainement du meilleur modele ;
+4. construction de la cible Docker api avec model.pkl ;
+5. publication sur GitHub Container Registry apres succes sur main.
 
 Les Pull Requests construisent l image sans la publier. Les pushes sur main publient deux tags : latest et sha-<commit>.
 
 Image publiee :
 
     ghcr.io/abdouul/openhousing-mlops:latest
+
+Pour Render, utiliser l image GHCR preconstruite ci-dessus. Elle contient deja model.pkl et peut demarrer sans volume local.
 
 Dependabot verifie chaque semaine les actions GitHub, les dependances Python et l image de base Docker.

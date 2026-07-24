@@ -15,6 +15,7 @@ database/*
 !database/.gitkeep
 models/*
 !models/.gitkeep
+!models/model.pkl
 data/raw/*
 !data/raw/.gitkeep
 data/processed/*

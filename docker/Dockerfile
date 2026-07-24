@@ -19,6 +19,7 @@ RUN python -m pip install --upgrade pip \
 COPY --chown=openhousing:openhousing src ./src
 RUN mkdir -p /app/models \
     && chown openhousing:openhousing /app/models
+COPY --chown=openhousing:openhousing models/model.pkl ./models/model.pkl
 
 USER openhousing
 

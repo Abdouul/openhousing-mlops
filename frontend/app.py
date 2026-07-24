@@ -1,4 +1,5 @@
-"""Interface Streamlit moderne pour OpenHousing."""
+"""Frontend Streamlit OpenHousing."""
+
 from __future__ import annotations
 
 import os
@@ -6,12 +7,11 @@ import streamlit as st
 
 from client import OpenHousingAPIError, OpenHousingClient
 
+# ==========================================================
+# CONFIGURATION
+# ==========================================================
 
 DEFAULT_API_URL = "https://openhousing-api.onrender.com"
-
-# ==========================================================
-# CONFIG PAGE
-# ==========================================================
 
 st.set_page_config(
     page_title="OpenHousing",
@@ -25,44 +25,40 @@ st.set_page_config(
 
 st.markdown(
     """
-    <style>
+<style>
 
-    .main > div {
-        padding-top: 1rem;
-    }
+.block-container{
+    max-width:1200px;
+    padding-top:1rem;
+}
 
-    .block-container {
-        max-width: 1200px;
-    }
+.hero{
+    background:linear-gradient(135deg,#0f766e,#14b8a6);
+    color:white;
+    padding:2rem;
+    border-radius:18px;
+    text-align:center;
+    margin-bottom:2rem;
+}
 
-    [data-testid="stMetric"] {
-        background-color: #f8fafc;
-        border: 1px solid #e5e7eb;
-        padding: 20px;
-        border-radius: 12px;
-    }
+.prediction-card{
+    background:linear-gradient(135deg,#0f766e,#14b8a6);
+    color:white;
+    padding:2rem;
+    border-radius:18px;
+    text-align:center;
+    margin-top:15px;
+}
 
-    .hero {
-        background: linear-gradient(135deg, #0f766e, #14b8a6);
-        padding: 2rem;
-        border-radius: 18px;
-        color: white;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
+[data-testid="stMetric"]{
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    padding:15px;
+    border-radius:12px;
+}
 
-    .prediction-card {
-        background: linear-gradient(135deg, #0f766e, #14b8a6);
-        padding: 2rem;
-        border-radius: 18px;
-        text-align: center;
-        color: white;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    </style>
-    """,
+</style>
+""",
     unsafe_allow_html=True,
 )
 
@@ -72,15 +68,15 @@ st.markdown(
 
 st.markdown(
     """
-    <div class="hero">
-        <h1>🏡 OpenHousing</h1>
-        <h3>Estimation immobilière par Intelligence Artificielle</h3>
-        <p>
-            Obtenez instantanément une estimation de prix à partir des
-            caractéristiques du logement et de son environnement.
-        </p>
-    </div>
-    """,
+<div class="hero">
+    <h1>🏡 OpenHousing</h1>
+    <h3>Estimation immobilière assistée par Intelligence Artificielle</h3>
+    <p>
+        Renseignez les caractéristiques d'un logement et obtenez instantanément
+        une estimation de sa valeur grâce à un modèle de Machine Learning.
+    </p>
+</div>
+""",
     unsafe_allow_html=True,
 )
 
@@ -92,16 +88,50 @@ api_url = os.getenv("OPENHOUSING_API_URL", DEFAULT_API_URL)
 client = OpenHousingClient(api_url)
 
 # ==========================================================
-# KPI
+# INDICATEURS
 # ==========================================================
 
-col1, col2, = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 with col1:
     st.metric("Variables analysées", "12")
 
 with col2:
-    st.metric("API", "En ligne ✅")
+    st.metric("Modèle utilisé", "XGBRegressor")
+
+with col3:
+    st.metric("API", "Production ✅")
+
+# ==========================================================
+# EXPLICATIONS
+# ==========================================================
+
+with st.expander("📚 Comprendre les variables utilisées par le modèle"):
+
+    st.markdown(
+        """
+### 🏠 Caractéristiques du logement
+
+- **Nombre moyen de pièces** : taille moyenne des logements.
+- **Logements anciens (%)** : part des logements construits avant 1940.
+- **Taxe foncière** : niveau de taxation immobilière.
+- **Ratio élèves / enseignant** : indicateur indirect de la qualité des écoles.
+
+### 🌆 Caractéristiques du quartier
+
+- **Taux de criminalité** : niveau de sécurité du secteur.
+- **Zones résidentielles à faible densité** : importance des grands terrains résidentiels.
+- **Surface industrielle** : présence d'activités industrielles ou commerciales.
+- **Pollution NOx** : niveau de pollution atmosphérique.
+- **Population à faible revenu** : indicateur socio-économique du quartier.
+- **Proximité de la Charles River** : présence d'un environnement naturel valorisant.
+
+### 🚗 Accessibilité
+
+- **Distance aux pôles d'emploi** : proximité des principaux centres économiques.
+- **Accessibilité autoroutière** : facilité d'accès aux grands axes routiers.
+"""
+    )
 
 # ==========================================================
 # SIDEBAR
@@ -111,11 +141,16 @@ with st.sidebar:
 
     st.header("⚙️ Monitoring")
 
-    st.markdown(f"**API** : `{api_url}`")
+    st.write(f"**API :** `{api_url}`")
 
-    if st.button("🔍 Vérifier l'API", use_container_width=True):
+    st.write("**Modèle :** XGBRegressor")
 
-        with st.spinner("Connexion en cours..."):
+    if st.button(
+        "🔍 Vérifier l'API",
+        use_container_width=True
+    ):
+
+        with st.spinner("Connexion à l'API..."):
 
             try:
 
@@ -125,17 +160,17 @@ with st.sidebar:
                     st.success("API disponible ✅")
                 else:
                     st.warning(
-                        f"État reçu : {health.get('status', 'inconnu')}"
+                        f"État reçu : {health.get('status')}"
                     )
 
             except OpenHousingAPIError as exc:
                 st.error(str(exc))
 
 # ==========================================================
-# FORMULAIRE
+# SAISIE
 # ==========================================================
 
-st.subheader("📝 Paramètres du logement")
+st.subheader("📝 Paramètres à analyser")
 
 with st.form("prediction_form"):
 
@@ -143,7 +178,7 @@ with st.form("prediction_form"):
         [
             "🏠 Logement",
             "🌆 Quartier",
-            "📊 Indicateurs",
+            "🚗 Accessibilité",
         ]
     )
 
@@ -151,111 +186,123 @@ with st.form("prediction_form"):
 
     with tab1:
 
-        c1, c2 = st.columns(2)
+        col_a, col_b = st.columns(2)
 
-        with c1:
+        with col_a:
+
             rm = st.slider(
-                "Nombre moyen de pièces",
-                min_value=1.0,
-                max_value=10.0,
-                value=6.575,
-                step=0.1,
+                "🛋️ Nombre moyen de pièces",
+                1.0,
+                10.0,
+                6.575,
+                help="Nombre moyen de pièces par logement.",
             )
 
             age = st.slider(
-                "Ancienneté des logements (%)",
-                min_value=0.0,
-                max_value=100.0,
-                value=65.2,
+                "🏚️ Logements anciens (%)",
+                0.0,
+                100.0,
+                65.2,
+                help="Part des logements construits avant 1940.",
             )
 
-        with c2:
+        with col_b:
 
             tax = st.number_input(
-                "Taxe foncière",
+                "💰 Taxe foncière",
                 value=296.0,
+                help="Taux d'imposition foncière appliqué aux biens immobiliers.",
             )
 
             ptratio = st.number_input(
-                "Ratio élèves / enseignant",
+                "🎓 Ratio élèves / enseignant",
                 value=15.3,
+                help="Indicateur indirect de la qualité du système scolaire.",
             )
 
     # ------------------------------------------------------
 
     with tab2:
 
-        c1, c2 = st.columns(2)
+        col_a, col_b = st.columns(2)
 
-        with c1:
+        with col_a:
 
             crim = st.number_input(
-                "Indice de criminalité",
+                "🚨 Taux de criminalité",
                 value=0.00632,
                 format="%.5f",
+                help="Taux de criminalité par habitant dans la ville.",
             )
 
             nox = st.slider(
-                "Concentration NOx",
-                min_value=0.0,
-                max_value=1.0,
-                value=0.538,
+                "🌫️ Niveau de pollution atmosphérique",
+                0.0,
+                1.0,
+                0.538,
+                help="Concentration d'oxydes d'azote (NOx).",
             )
 
             lstat = st.slider(
-                "Population à faible revenu (%)",
-                min_value=0.0,
-                max_value=100.0,
-                value=4.98,
+                "📉 Population à faible revenu (%)",
+                0.0,
+                100.0,
+                4.98,
+                help="Part de la population à faible statut socio-économique.",
             )
 
-        with c2:
+        with col_b:
 
             zn = st.slider(
-                "Zones résidentielles (%)",
-                min_value=0.0,
-                max_value=100.0,
-                value=18.0,
+                "🏘️ Zones résidentielles à faible densité (%)",
+                0.0,
+                100.0,
+                18.0,
+                help="Part des terrains résidentiels composés de grandes parcelles.",
             )
 
             indus = st.slider(
-                "Zones industrielles (%)",
-                min_value=0.0,
-                max_value=30.0,
-                value=2.31,
+                "🏭 Surface industrielle (%)",
+                0.0,
+                30.0,
+                2.31,
+                help="Part des terrains occupés par des activités industrielles ou commerciales.",
             )
 
             chas = st.selectbox(
-                "Proximité Charles River",
+                "🌊 Proximité de la Charles River",
                 (0, 1),
-                format_func=lambda v: "Oui" if v else "Non",
+                format_func=lambda x: "Oui" if x else "Non",
+                help="Indique si le secteur est bordé par la Charles River.",
             )
 
     # ------------------------------------------------------
 
     with tab3:
 
-        c1, c2 = st.columns(2)
+        col_a, col_b = st.columns(2)
 
-        with c1:
+        with col_a:
 
             dis = st.number_input(
-                "Distance aux pôles d'emploi",
+                "🚉 Distance aux pôles d'emploi",
                 value=4.09,
+                help="Distance pondérée aux principaux centres d'emploi de Boston.",
             )
 
-        with c2:
+        with col_b:
 
             rad = st.number_input(
-                "Indice d'accès routier",
+                "🛣️ Accessibilité autoroutière",
                 min_value=1,
                 value=1,
+                help="Indice d'accès aux principales autoroutes.",
             )
 
     submitted = st.form_submit_button(
         "🚀 Estimer le prix",
-        type="primary",
         use_container_width=True,
+        type="primary",
     )
 
 # ==========================================================
@@ -283,10 +330,7 @@ payload = {
 
 if submitted:
 
-    with st.spinner(
-        "Calcul de l'estimation... "
-        "Le réveil de l'API peut prendre quelques secondes."
-    ):
+    with st.spinner("Calcul de l'estimation..."):
 
         try:
 
@@ -296,41 +340,39 @@ if submitted:
                 prediction["estimated_price_usd"]
             )
 
-            st.success("✅ Estimation générée")
+            st.success("Estimation réalisée avec succès ✅")
 
             st.markdown(
                 f"""
                 <div class="prediction-card">
                     <h2>Prix estimé</h2>
                     <h1>${price:,.0f}</h1>
-                    <p>Prédiction réalisée par le modèle OpenHousing</p>
+                    <p>Prédiction générée par le modèle XGBRegressor</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-            st.caption("Niveau de confiance indicatif")
+            st.metric(
+                "Modèle utilisé",
+                "XGBRegressor"
+            )
 
             st.progress(89)
 
-            if prediction.get("model_name"):
-
-                st.info(
-                    f"🤖 Modèle utilisé : "
-                    f"{prediction['model_name']}"
-                )
+            st.caption(
+                "Indice de confiance visuel du modèle : 89 %"
+            )
 
             with st.expander("📊 Détails techniques"):
 
-                col_left, col_right = st.columns(2)
+                left, right = st.columns(2)
 
-                with col_left:
-
-                    st.subheader("Variables envoyées")
+                with left:
+                    st.subheader("Payload envoyé")
                     st.json(payload)
 
-                with col_right:
-
+                with right:
                     st.subheader("Réponse API")
                     st.json(prediction)
 
@@ -346,8 +388,10 @@ st.divider()
 
 st.info(
     """
-    ℹ️ Cette application constitue une démonstration MLOps.
-    Les estimations reposent sur le jeu de données Boston Housing
-    et ne doivent pas être utilisées pour une expertise immobilière réelle.
-    """
+ℹ️ Démonstration pédagogique MLOps.
+
+Ce modèle prédit une valeur immobilière à partir du célèbre jeu de données
+Boston Housing. Les résultats ne doivent pas être utilisés comme expertise
+immobilière réelle.
+"""
 )

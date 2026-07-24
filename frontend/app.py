@@ -93,16 +93,10 @@ client = OpenHousingClient(api_url)
 # INDICATEURS
 # ==========================================================
 
-col1, col2, col3 = st.columns(3)
+col1 = st.columns(1)
 
 with col1:
     st.metric("Variables analysées", "12")
-
-with col2:
-    st.metric("Modèle utilisé", "XGBRegressor")
-
-with col3:
-    st.metric("API", "Production ✅")
 
 # ==========================================================
 # EXPLICATIONS

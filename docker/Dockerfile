@@ -34,6 +34,7 @@ FROM api AS development
 
 USER root
 COPY requirements-api.txt requirements-dev.txt ./
+COPY frontend/requirements.txt ./frontend/requirements.txt
 RUN python -m pip install -r requirements-dev.txt
 COPY --chown=openhousing:openhousing . .
 USER openhousing

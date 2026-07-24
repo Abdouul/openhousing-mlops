@@ -50,3 +50,27 @@ services:
       JUPYTER_TOKEN: ${JUPYTER_TOKEN:-openhousing}
     security_opt:
       - no-new-privileges:true
+
+  streamlit:
+    profiles: ["ui"]
+    image: openhousing-development:local
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: development
+    command: streamlit run frontend/app.py --server.address=0.0.0.0 --server.port=8501
+    ports:
+      - "${STREAMLIT_PORT:-8501}:8501"
+    environment:
+      OPENHOUSING_API_URL: ${OPENHOUSING_API_URL:-http://api:8000}
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true

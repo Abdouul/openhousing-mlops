@@ -14,6 +14,7 @@ OpenHousing étudie les indicateurs socio-économiques et les prix immobiliers. 
     src/etl/           Extraction, transformation et chargement
     src/model/         Entraînement et prédiction
     src/api/           Service FastAPI
+    frontend/          Interface utilisateur Streamlit
     tests/             Tests automatisés
 
 ## POC
@@ -105,6 +106,24 @@ Lancer Jupyter en mode developpement :
 Arreter les services :
 
     docker compose down
+
+
+## Interface Streamlit
+
+L interface appelle l API FastAPI publique et ne charge pas le modele elle-meme. Elle propose les 12 variables, verifie la disponibilite de l API, affiche le prix estime en USD et gere le temps de reveil possible de Render.
+
+Lancement local avec l API Render :
+
+    pip install -r frontend/requirements.txt
+    streamlit run frontend/app.py
+
+Lancement Docker avec l API locale :
+
+    docker compose --profile ui up --build streamlit
+
+Interface : http://localhost:8501
+
+Pour Streamlit Community Cloud, selectionner ce depot, la branche main et le fichier d entree `frontend/app.py`. Le fichier `frontend/requirements.txt` sera detecte automatiquement. La variable `OPENHOUSING_API_URL` est facultative : par defaut, l interface utilise `https://openhousing-api.onrender.com`.
 
 ## CI/CD
 

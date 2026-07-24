@@ -4,3 +4,4 @@ seaborn>=0.13.0
 pytest>=8.3.0
 jupyter>=1.0.0
 python-dotenv>=1.0.0
+-r frontend/requirements.txt

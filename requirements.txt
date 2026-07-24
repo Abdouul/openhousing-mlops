@@ -10,3 +10,4 @@ uvicorn[standard]>=0.30.0
 pytest>=8.3.0
 jupyter>=1.0.0
 python-dotenv>=1.0.0
+requests>=2.32,<3

@@ -74,19 +74,13 @@ st.markdown(
     <p>
         Renseignez les caractéristiques d'un logement et obtenez instantanément
         une estimation de sa valeur grâce à un modèle de Machine Learning.
+        Proposition faite par l'équipe Tomate 🍅 
     </p>
 </div>
 """,
     unsafe_allow_html=True,
 )
-st.markdown(
-    """
-    <div style="text-align:center; margin-bottom:15px;">
-        <h4>🍅 Proposition faite par l'équipe Tomate</h4>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+
 
 # ==========================================================
 # API

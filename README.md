@@ -114,7 +114,8 @@ GitHub Actions execute automatiquement :
 2. validation JSON des notebooks ;
 3. execution ETL et entrainement du meilleur modele ;
 4. construction de la cible Docker api avec model.pkl ;
-5. publication sur GitHub Container Registry apres succes sur main.
+5. publication sur GitHub Container Registry apres succes sur main ;
+6. declenchement automatique du deploiement Render par Deploy Hook.
 
 Les Pull Requests construisent l image sans la publier. Les pushes sur main publient deux tags : latest et sha-<commit>.
 

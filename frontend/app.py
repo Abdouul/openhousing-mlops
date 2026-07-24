@@ -343,26 +343,14 @@ if submitted:
             st.success("Estimation réalisée avec succès ✅")
 
             st.markdown(
-                f"""
-                <div class="prediction-card">
-                    <h2>Prix estimé</h2>
-                    <h1>${price:,.0f}</h1>
-                    <p>Prédiction générée par le modèle XGBRegressor</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-            st.metric(
-                "Modèle utilisé",
-                "XGBRegressor"
-            )
-
-            st.progress(89)
-
-            st.caption(
-                "Indice de confiance visuel du modèle : 89 %"
-            )
+    f"""
+    <div class="prediction-card">
+        <h2>Prix estimé</h2>
+        <h1>${price:,.0f}</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
             with st.expander("📊 Détails techniques"):
 

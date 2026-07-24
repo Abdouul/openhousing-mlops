@@ -1,6 +1,6 @@
 import pytest
 import requests
-from src.frontend.client import OpenHousingAPIError, OpenHousingClient
+from frontend.client import OpenHousingAPIError, OpenHousingClient
 
 class FakeResponse:
     def __init__(self, body, status_code=200):

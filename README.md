@@ -66,3 +66,31 @@ Demarrage local :
 Exemple de prediction :
 
     curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d "{\"crim\":0.00632,\"zn\":18,\"indus\":2.31,\"chas\":0,\"nox\":0.538,\"rm\":6.575,\"age\":65.2,\"dis\":4.09,\"rad\":1,\"tax\":296,\"ptratio\":15.3,\"lstat\":4.98}"
+
+## Docker
+
+L image API utilise Python 3.12 et XGBoost CPU. Elle s execute avec un utilisateur non-root, un systeme de fichiers en lecture seule et un healthcheck sur /ready. Le fichier models/model.pkl doit exister avant le demarrage.
+
+Construire et lancer l API :
+
+    docker compose build api
+    docker compose up -d api
+
+Verifier le service :
+
+    docker compose ps
+    docker compose logs -f api
+
+Swagger est disponible sur http://localhost:8000/docs.
+
+Executer l ETL dans Docker :
+
+    docker compose --profile pipeline run --rm etl
+
+Lancer Jupyter en mode developpement :
+
+    docker compose --profile dev up jupyter
+
+Arreter les services :
+
+    docker compose down

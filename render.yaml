@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: openhousing-api
+    runtime: image
+    plan: free
+    region: frankfurt
+    image:
+      url: ghcr.io/abdouul/openhousing-mlops:latest
+    healthCheckPath: /ready
+    numInstances: 1
+    envVars:
+      - key: OPENHOUSING_MODEL_PATH
+        value: /app/models/model.pkl

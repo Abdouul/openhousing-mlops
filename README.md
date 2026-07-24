@@ -125,3 +125,13 @@ Image publiee :
 Pour Render, utiliser l image GHCR preconstruite ci-dessus. Elle contient deja model.pkl et peut demarrer sans volume local.
 
 Dependabot verifie chaque semaine les actions GitHub, les dependances Python et l image de base Docker.
+
+## Deploiement Render
+
+Le fichier render.yaml decrit un Web Service gratuit en region Frankfurt, base sur l image GHCR autonome et controle par /ready.
+
+Image :
+
+    ghcr.io/abdouul/openhousing-mlops:latest
+
+Le service attendu est openhousing-api. Apres deploiement, verifier /health, /ready, /model, /predict et /docs.

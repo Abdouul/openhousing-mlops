@@ -65,7 +65,14 @@ st.markdown(
 # ==========================================================
 # HEADER
 # ==========================================================
-
+st.markdown(
+    """
+    <div style="text-align:center; margin-bottom:15px;">
+        <h4>🍅 Proposition faite par l'équipe Tomate</h4>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 st.markdown(
     """
 <div class="hero">
@@ -371,15 +378,3 @@ if submitted:
 # ==========================================================
 # FOOTER
 # ==========================================================
-
-st.divider()
-
-st.info(
-    """
-ℹ️ Démonstration pédagogique MLOps.
-
-Ce modèle prédit une valeur immobilière à partir du célèbre jeu de données
-Boston Housing. Les résultats ne doivent pas être utilisés comme expertise
-immobilière réelle.
-"""
-)
